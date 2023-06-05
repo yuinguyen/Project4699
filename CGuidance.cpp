@@ -1,7 +1,12 @@
+////////////////////////////////////////////////////////////////
+// ELEX 4699 Electrical System Design
+// QR Shooting Robot
+// CGuidance.cpp
+// Created June 04, 2023 by Yui Nguyen
+// This CGuidance class takes care of image processing and state functions for the autonomous mode
+////////////////////////////////////////////////////////////////
 #include "CGuidance.h"
-#define SHOOT_DIST 2000
 #include "CCar.h"
-//#include <opencv2/opencv.hpp>
 #define RESWIDTH 480
 #define RESHEIGHT 469
 #define SERVO_MAX 2500
@@ -11,6 +16,7 @@
 #define TARGET3 27
 #define TARGET4 23
 #define QREND 29
+#define SHOOT_DIST 2000
 
 #define SHOOTTWIST 80
 #define TURNDELAY 90
@@ -57,17 +63,14 @@
 using namespace cv;
 using namespace std;
 
-//Server imserv;
 CCar car;
-
 
 CGuidance::CGuidance()
 {
+    //initialize
     cnt = 0;
     shootcnt = 0;
     serverthreadexit = false;
-    //imserver();
-    //cv::waitKey(150);
     foundtarg1 = false;
     foundtarg2 = false;
     foundtarg3 = false;
@@ -91,29 +94,20 @@ CGuidance::CGuidance()
     start_look_targ2 = false;
     start_look_targ3 = false;
     start_look_targ4 = false;
-
-
 }
 CGuidance::~CGuidance()
 {
-    //imserv.stop();
-    //sleep(10);
 }
-
 
 void CGuidance::update(cv::Mat imfromMain)
 {
-    //imserv.set_txim(imfromMain);
 }
-
 
 int CGuidance::get_area(cv::Point2f xy1, cv::Point2f xy2, cv::Point2f xy3, cv::Point2f xy4)
 {
     area = abs((xy1.x * xy2.y - xy1.y * xy2.x) + (xy2.x * xy3.y - xy2.y * xy3.x) + (xy3.x * xy4.y - xy3.y * xy4.x) + (xy4.x * xy1.y - xy4.y * xy1.x)) / 2;
-
     return area;
 }
-
 
 cv::Mat CGuidance::detectMarker (cv::Mat inputImage)
 {
@@ -137,7 +131,6 @@ cv::Mat CGuidance::detectMarker (cv::Mat inputImage)
     }
     return outputImage;
 }
-
 
 bool CGuidance::find_target()
 {
@@ -623,9 +616,3 @@ if (markerIds.size() == 0 && foundqrend == false)
         }
     }
 }
-
-
-
-
-
-

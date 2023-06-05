@@ -1,7 +1,11 @@
 
-
-//#include <pigpio.h>
-//#include "car.h"
+////////////////////////////////////////////////////////////////
+// ELEX 4699 Electrical System Design
+// QR Shooting Robot
+// CCar.cpp
+// Created June 04, 2023 by Yui Nguyen
+// This CCar class contains functions that directly control the car using pigpio.h
+////////////////////////////////////////////////////////////////
 #include "CCar.h"
 
 #define ENL 12
@@ -114,6 +118,7 @@ void CCar::forward_auto(int LPWMPERIOD, int RPWMPERIOD)
 void CCar::backward()
 {
 	cout << "BACKWARD\n";
+
 	gpioPWM(ENR,PWMPERIOD - BIAS_SPEED);
 	gpioWrite(in1R, LOW);
 	gpioWrite(in2R, HIGH);
@@ -139,6 +144,7 @@ void CCar::backward_auto(int left, int right)
 void CCar::left()
 {
 	cout << "LEFT\n";
+
 	gpioPWM(ENR,PWMPERIODTURN);
     gpioWrite(in2R, HIGH);
 	gpioWrite(in1R, LOW);
@@ -150,10 +156,10 @@ void CCar::left()
 
 void CCar::right()
 {
-
 	cout << "RIGHT\n";
+
 	gpioPWM(ENR,PWMPERIODTURN);
-gpioWrite(in2R, LOW);
+	gpioWrite(in2R, LOW);
 	gpioWrite(in1R, HIGH);
 
 	gpioPWM(ENL,PWMPERIODTURN);
@@ -195,8 +201,6 @@ void CCar::fire()
 	fire += FIRE_INCREMENT;
 	delayMicroseconds(DELAY_RETREAT);
 	}
-
-
 }
  void CCar::trackServ(int servPos)
  {
@@ -206,10 +210,8 @@ void CCar::fire()
 
 bool CCar::all_targets()
 {
-
 }
 
 bool CCar::is_end_target_seen()
 {
-
 }

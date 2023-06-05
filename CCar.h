@@ -1,17 +1,12 @@
 #ifndef CCAR_H
 #define CCAR_H
-//#include "CGuidance.h"
 #include "pigpio.h"
 #include <wiringPi.h>
 #include <iostream>
 
-
 class CCar
 {
     private:
-        //Server _server;
-        //CMotor _motors;
-        //CGuidance _guidance;
         static void serverthrd(CCar *ptr);
         static void imagethrd(CCar *ptr);
         int target_cnt;
@@ -39,10 +34,5 @@ class CCar
         bool all_targets();
         bool is_end_target_seen(); //move backward to check for end target
         void move_end();
-
-        //bool drive();
-
 };
-
-
 #endif // CCAR_H

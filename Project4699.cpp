@@ -35,6 +35,7 @@
 
 #define SERV_INCREMENT 5
 #define SERV_DELAY 3000
+#define SERV_LOOP_THRES 50
 Server cmdserv;
 Server imserv;
 using namespace cv;
@@ -234,7 +235,7 @@ int main(int argc, char* argv[])
 						cmd = 'j';
 						std::string reply = "Server ack: servo left";
 						cmdserv.send_string(reply);
-						for (int j = 0; j <= 50; j++)
+						for (int j = 0; j <= SERV_LOOP_THRES; j++)
 						{
 
 							if (count_manual_track > SERVO_MAX) {
@@ -244,8 +245,8 @@ int main(int argc, char* argv[])
 								count_manual_track = SERVO_MIN;
 							}
 							car.trackServ(count_manual_track);
-							count_manual_track += 5;
-							delayMicroseconds(3000);
+							count_manual_track += SERV_INCREMENT;
+							delayMicroseconds(SERV_DELAY);
 						}
 					}
 					else if (cmds.at(i) == "l")
@@ -254,7 +255,7 @@ int main(int argc, char* argv[])
 						cmd = 'j';
 						std::string reply = "Server ack: servo right";
 						cmdserv.send_string(reply);
-						for (int j = 0; j <= 50; j++)
+						for (int j = 0; j <= SERV_LOOP_THRES; j++)
 						{
 
 							if (count_manual_track > SERVO_MAX) {
@@ -265,8 +266,8 @@ int main(int argc, char* argv[])
 							}
 
 							car.trackServ(count_manual_track);
-							count_manual_track -= 5;
-							delayMicroseconds(3000);
+							count_manual_track -= SERV_INCREMENT;
+							delayMicroseconds(SERV_DELAY);
 						}
 					}
 				}
@@ -286,13 +287,15 @@ int main(int argc, char* argv[])
 					//turning servo manually
 				case 'j':
 				{
-					for (int j = 0; j <= 50; j++)
+					for (int j = 0; j <= SERV_LOOP_THRES; j++)
 					{
 
-						if (count_manual_track > SERVO_MAX) {
+						if (count_manual_track > SERVO_MAX) 
+						{
 							count_manual_track = SERVO_MAX;
 						}
-						else if (count_manual_track < SERVO_MIN) {
+						else if (count_manual_track < SERVO_MIN) 
+						{
 							count_manual_track = SERVO_MIN;
 						}
 						car.trackServ(count_manual_track);
@@ -302,13 +305,15 @@ int main(int argc, char* argv[])
 					break; }
 				case 'l':
 				{
-					for (int j = 0; j <= 50; j++)
+					for (int j = 0; j <= SERV_LOOP_THRES; j++)
 					{
 
-						if (count_manual_track > SERVO_MAX) {
+						if (count_manual_track > SERVO_MAX) 
+						{
 							count_manual_track = SERVO_MAX;
 						}
-						else if (count_manual_track < SERVO_MIN) {
+						else if (count_manual_track < SERVO_MIN) 
+						{
 							count_manual_track = SERVO_MIN;
 						}
 

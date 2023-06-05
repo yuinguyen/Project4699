@@ -1,27 +1,31 @@
 
 
-
-
-
 //#include <pigpio.h>
 //#include "car.h"
 #include "CCar.h"
 
-#define ENL 12// 21
+#define ENL 12
 #define ENR 16
-#define in1L 18//26
-#define in2L 23//19
-#define in1R 1//6
-#define in2R 24//13
+#define in1L 18
+#define in2L 23
+#define in1R 1
+#define in2R 24
 #define STB 25
 #define pulse 2
-#define fire_servo 2//3
-#define track_servo 15//4
+#define fire_servo 2
+#define track_servo 15
 #define TARGET1 21
 #define TARGET2 22
 #define TARGET3 27
 #define TARGET4 23
+#define ACC_DELAY 10
+#define FIRE_INIT_POS 2000
+#define FIRE_INCREMENT 20
+#define FORLOOPEXIT 70
+#define DELAY_SHOOT 2000
+#define DELAY_RETREAT 1000
 
+#define BIAS_SPEED 20
 
 #define SHOOT_DIST 11000
 
@@ -36,7 +40,6 @@ using namespace std;
 CCar::CCar()
 {
     gpioInitialise();//ctor
-    //wiringPiSetup();
 
     gpioSetMode(ENL, PI_OUTPUT);
     gpioSetMode(ENR, PI_OUTPUT);
@@ -47,46 +50,37 @@ CCar::CCar()
     gpioSetMode(STB, PI_OUTPUT);
     gpioSetMode(fire_servo, PI_OUTPUT);
     gpioSetMode(track_servo, PI_OUTPUT);
-    //gpioWrite(STB, HIGH);
-
-    //gpioServo(track_servo, 1000);
     target_cnt = 0;
-
     //initialize state machine
     //MAIN_STATE main_state = 4_TARGETS;
-
-
 }
 
 CCar::~CCar()
 {
-//gpioWrite(STB, LOW);
     gpioTerminate();//dtor
 }
 
 void CCar::forward()
 {
 	cout << "FORWARD\n";
-	//adding acceleration
+	//implementing acceleration
 	gpioPWM(ENR,PWMPERIOD/4);
-	delay(10);
+	delay(ACC_DELAY);
 	gpioPWM(ENR,PWMPERIOD/3);
-	delay(10);
+	delay(ACC_DELAY);
 	gpioPWM(ENR,PWMPERIOD/2);
-	delay(10);
+	delay(ACC_DELAY);
 	gpioPWM(ENR,PWMPERIOD);
-	//gpioWrite(ENR, HIGH);
 	gpioWrite(in2R, LOW);
 	gpioWrite(in1R, HIGH);
 
     gpioPWM(ENL,PWMPERIOD/4);
-    delay(10);
+    delay(ACC_DELAY);
 	gpioPWM(ENL,PWMPERIOD/3);
-	delay(10);
+	delay(ACC_DELAY);
 	gpioPWM(ENL,PWMPERIOD/2);
-	delay(10);
+	delay(ACC_DELAY);
 	gpioPWM(ENL,PWMPERIOD);
-	//gpioWrite(ENL, HIGH);
 	gpioWrite(in2L, LOW);
 	gpioWrite(in1L, HIGH);
 
@@ -95,46 +89,36 @@ void CCar::forward()
 void CCar::forward_auto(int LPWMPERIOD, int RPWMPERIOD)
 {
 	cout << "FORWARD\n";
+	//implementing acceleration
 	gpioPWM(ENR,RPWMPERIOD/4);
-	delay(10);
+	delay(ACC_DELAY);
 	gpioPWM(ENR,RPWMPERIOD/3);
-	delay(10);
+	delay(ACC_DELAY);
 	gpioPWM(ENR,RPWMPERIOD/2);
-	delay(10);
+	delay(ACC_DELAY);
 	gpioPWM(ENR,RPWMPERIOD);
 	gpioWrite(in2R, LOW);
 	gpioWrite(in1R, HIGH);
 
     gpioPWM(ENL,LPWMPERIOD/4);
-    delay(10);
+    delay(ACC_DELAY);
     gpioPWM(ENL,LPWMPERIOD/3);
-    delay(10);
+    delay(ACC_DELAY);
     gpioPWM(ENL,LPWMPERIOD/2);
-    delay(10);
+    delay(ACC_DELAY);
 	gpioPWM(ENL,LPWMPERIOD);
 	gpioWrite(in2L, LOW);
 	gpioWrite(in1L, HIGH);
-
-
 }
 
 void CCar::backward()
 {
 	cout << "BACKWARD\n";
-//    gpioPWM(ENR,PWMPERIOD);
-//	gpioWrite(in1R, LOW);
-//	gpioWrite(in2R, HIGH);
-//
-//	gpioPWM(ENL,PWMPERIOD);
-//	gpioWrite(in1L, LOW);
-//	gpioWrite(in2L, HIGH);
-//
-//	delay(500); //go fast for half a sec
-	gpioPWM(ENR,PWMPERIOD - 20);
+	gpioPWM(ENR,PWMPERIOD - BIAS_SPEED);
 	gpioWrite(in1R, LOW);
 	gpioWrite(in2R, HIGH);
 
-	gpioPWM(ENL,PWMPERIOD - 20);
+	gpioPWM(ENL,PWMPERIOD - BIAS_SPEED);
 	gpioWrite(in1L, LOW);
 	gpioWrite(in2L, HIGH);
 }
@@ -142,15 +126,7 @@ void CCar::backward()
 void CCar::backward_auto(int left, int right)
 {
 	cout << "BACKWARD\n";
-//    gpioPWM(ENR,PWMPERIOD);
-//	gpioWrite(in1R, LOW);
-//	gpioWrite(in2R, HIGH);
-//
-//	gpioPWM(ENL,PWMPERIOD);
-//	gpioWrite(in1L, LOW);
-//	gpioWrite(in2L, HIGH);
-//
-//	delay(500); //go fast for half a sec
+
 	gpioPWM(ENR,right);
 	gpioWrite(in1R, LOW);
 	gpioWrite(in2R, HIGH);
@@ -204,45 +180,29 @@ void CCar::stopcar()
 void CCar::fire()
 {
 	cout << "FIRING\n\n";
-	int fire = 2000;
-    for (int j = 0; j <= 70; j++)
+	int fire = FIRE_INIT_POS;
+    for (int j = 0; j <= FORLOOPEXIT; j++)
     {
 
-    //gpioSetMode(fire_servo, PI_OUTPUT);
 	gpioServo(fire_servo, fire);
-	fire -= 20;
-	delayMicroseconds(2000);
+	fire -= FIRE_INCREMENT;
+	delayMicroseconds(DELAY_SHOOT);
 	}
 
-	for (int i = 0; i<=70; i++)
+	for (int i = 0; i <= FORLOOPEXIT; i++)
 	{
-	    //gpioSetMode(fire_servo, PI_OUTPUT);
-    //gpioSetMode(fire_servo, PI_OUTPUT);
 	gpioServo(fire_servo, fire);
-	fire += 20;
-	delayMicroseconds(1000);
+	fire += FIRE_INCREMENT;
+	delayMicroseconds(DELAY_RETREAT);
 	}
-	//delay(500);
-	//gpioPWM(fire_servo, 125);
-	//delay(1000);
-	//gpioWrite(pulse,HIGH);
-	//delay(18);
-	//gpioWrite(pulse,LOW);
-	//gpioPWM(fire_servo, 50);
+
 
 }
  void CCar::trackServ(int servPos)
  {
  cout << "TURN SERVO\n";
-
  gpioServo(track_servo, servPos);
  }
-
-
-
-
-
-
 
 bool CCar::all_targets()
 {

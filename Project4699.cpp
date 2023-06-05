@@ -4,7 +4,7 @@
 // Project4699.cpp
 // Created June 04, 2023 by Yui Nguyen
 // This contains the main function that pratically controls the car, including the manual mode based on commands.
-// Due to some issues, I was unable to open the Pi Cam and run the server for manual mode in its own class. Hence, 
+// Due to some issues, I was unable to open the Pi Cam and run the server for manual mode in their own classes. Hence, 
 // I moved those functions into main to solve the problem.
 ////////////////////////////////////////////////////////////////
 #pragma once

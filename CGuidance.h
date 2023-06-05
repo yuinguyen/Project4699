@@ -3,9 +3,6 @@
 #include <opencv2/opencv.hpp>
 #include <opencv2/aruco.hpp>
 
-
-
-
 class CGuidance
 {
     public:
@@ -29,19 +26,19 @@ class CGuidance
     //index initializer
     int i = 0;
     int j = 0;
-    //flag checking if a target is found
+    //flags checking if a target is found
     bool foundtarg1;
     bool foundtarg2;
     bool foundtarg3;
     bool foundtarg4;
     bool foundqrend;
-    //flag to see whether a target is shot or not
+    //flags seeing whether a target is shot or not
     bool targ1shot;
     bool shoottarget1 = false;
     bool targ2shot;
     bool targ3shot;
     bool targ4shot;
-    //flag telling that a state is done
+    //flags telling that a state is done
     bool pathAdone;
     bool pathBdone;
     bool pathCdone;
@@ -60,7 +57,6 @@ class CGuidance
     bool start_look_targ3;
     bool start_look_targ4;
     bool start_look_qrend;
-
     //states
     void pathA(int init_pos);
     void pathB(int init_pos);
@@ -68,7 +64,7 @@ class CGuidance
     void pathD(int init_pos);
     void pathE(int init_pos);
     //counters
-    int cnt ;
+    int cnt;
     int shootcnt;
     //get position
     int get_pos(int targID);
@@ -93,5 +89,4 @@ class CGuidance
     //aruco dictionary
     cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_6X6_250);
 };
-
 #endif // CGUIDANCE_H

@@ -1,3 +1,12 @@
+////////////////////////////////////////////////////////////////
+// ELEX 4699 Electrical System Design
+// QR Shooting Robot
+// Project4699.cpp
+// Created June 04, 2023 by Yui Nguyen
+// This contains the main function that pratically controls the car, including the manual mode based on commands.
+// Due to some issues, I was unable to open the Pi Cam and run the server for manual mode in its own class. Hence, 
+// I moved those functions into main to solve the problem.
+////////////////////////////////////////////////////////////////
 #pragma once
 #include <stdio.h>
 #include <termios.h>
@@ -66,7 +75,6 @@ int kbhit(void)
 void imthread()
 {
 	imserv.start(4618);
-
 }
 
 void imserver()
@@ -500,6 +508,5 @@ int main(int argc, char* argv[])
 	imserv.stop();
 	cv::destroyAllWindows();
 	std::cout << "Program closed successfully" << std::endl;
-
 	return 0;
 }

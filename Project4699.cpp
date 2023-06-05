@@ -36,11 +36,12 @@
 #define SERV_INCREMENT 5
 #define SERV_DELAY 3000
 #define SERV_LOOP_THRES 50
-Server cmdserv;
-Server imserv;
+
 using namespace cv;
 
 CGuidance _send_im;
+Server cmdserv;
+Server imserv;
 cv::VideoCapture _cap;
 cv::Mat _display_im;
 bool camthreadexit = false;

@@ -100,16 +100,19 @@ void CCar::forward_auto(int LPWMPERIOD, int RPWMPERIOD)
 	delay(ACC_DELAY);
 	gpioPWM(ENR,RPWMPERIOD/2);
 	delay(ACC_DELAY);
+	
 	gpioPWM(ENR,RPWMPERIOD);
 	gpioWrite(in2R, LOW);
 	gpioWrite(in1R, HIGH);
-
+	
+	//implementing acceleration
     	gpioPWM(ENL,LPWMPERIOD/4);
     	delay(ACC_DELAY);
     	gpioPWM(ENL,LPWMPERIOD/3);
     	delay(ACC_DELAY);
     	gpioPWM(ENL,LPWMPERIOD/2);
     	delay(ACC_DELAY);
+	
 	gpioPWM(ENL,LPWMPERIOD);
 	gpioWrite(in2L, LOW);
 	gpioWrite(in1L, HIGH);

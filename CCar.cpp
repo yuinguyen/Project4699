@@ -78,8 +78,8 @@ void CCar::forward()
 	gpioWrite(in2R, LOW);
 	gpioWrite(in1R, HIGH);
 
-    gpioPWM(ENL,PWMPERIOD/4);
-    delay(ACC_DELAY);
+    	gpioPWM(ENL,PWMPERIOD/4);
+    	delay(ACC_DELAY);
 	gpioPWM(ENL,PWMPERIOD/3);
 	delay(ACC_DELAY);
 	gpioPWM(ENL,PWMPERIOD/2);
@@ -104,12 +104,12 @@ void CCar::forward_auto(int LPWMPERIOD, int RPWMPERIOD)
 	gpioWrite(in2R, LOW);
 	gpioWrite(in1R, HIGH);
 
-    gpioPWM(ENL,LPWMPERIOD/4);
-    delay(ACC_DELAY);
-    gpioPWM(ENL,LPWMPERIOD/3);
-    delay(ACC_DELAY);
-    gpioPWM(ENL,LPWMPERIOD/2);
-    delay(ACC_DELAY);
+    	gpioPWM(ENL,LPWMPERIOD/4);
+    	delay(ACC_DELAY);
+    	gpioPWM(ENL,LPWMPERIOD/3);
+    	delay(ACC_DELAY);
+    	gpioPWM(ENL,LPWMPERIOD/2);
+    	delay(ACC_DELAY);
 	gpioPWM(ENL,LPWMPERIOD);
 	gpioWrite(in2L, LOW);
 	gpioWrite(in1L, HIGH);
@@ -146,7 +146,7 @@ void CCar::left()
 	cout << "LEFT\n";
 
 	gpioPWM(ENR,PWMPERIODTURN);
-    gpioWrite(in2R, HIGH);
+    	gpioWrite(in2R, HIGH);
 	gpioWrite(in1R, LOW);
 
 	gpioPWM(ENL,PWMPERIODTURN);
@@ -170,7 +170,8 @@ void CCar::right()
 
 void CCar::stopcar()
 {
-    cout << "STOP\n";
+    	cout << "STOP\n";
+	
 	gpioWrite(in1R, LOW);
 	gpioWrite(in2R, LOW);
 	//deccelerate
@@ -179,6 +180,7 @@ void CCar::stopcar()
 
 	gpioWrite(in1L, LOW);
 	gpioWrite(in2L, LOW);
+	//deccelerate
 	gpioPWM(ENR,50);
 	gpioPWM(ENL,0);
 }
@@ -186,10 +188,10 @@ void CCar::stopcar()
 void CCar::fire()
 {
 	cout << "FIRING\n\n";
+	
 	int fire = FIRE_INIT_POS;
-    for (int j = 0; j <= FORLOOPEXIT; j++)
-    {
-
+    	for (int j = 0; j <= FORLOOPEXIT; j++)
+    	{
 	gpioServo(fire_servo, fire);
 	fire -= FIRE_INCREMENT;
 	delayMicroseconds(DELAY_SHOOT);
@@ -202,11 +204,12 @@ void CCar::fire()
 	delayMicroseconds(DELAY_RETREAT);
 	}
 }
- void CCar::trackServ(int servPos)
- {
- cout << "TURN SERVO\n";
- gpioServo(track_servo, servPos);
- }
+
+void CCar::trackServ(int servPos)
+{
+	cout << "TURN SERVO\n";
+	gpioServo(track_servo, servPos);
+}
 
 bool CCar::all_targets()
 {
